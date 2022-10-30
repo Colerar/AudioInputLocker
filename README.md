@@ -32,7 +32,7 @@ put it into `~/Library/LaunchAgents`:
     <string>me.colerar.ail</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/path/to/ail</string>
+        <string>/path/to/ail lock <ID></string>
     </array>
     <key>RunAtLoad</key>
     <true/>
