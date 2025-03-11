@@ -5,14 +5,20 @@ import PackageDescription
 
 let package = Package(
     name: "AudioInputLocker",
+    platforms: [
+        .macOS(.v13)
+    ],
+    products: [
+        .executable(name: "AudioInputLocker", targets: ["AudioInputLocker"]),
+    ],
     dependencies: [
-        .package(url: "https://github.com/rnine/SimplyCoreAudio.git", from: "4.1.0"),
-        .package(url: "https://github.com/jakeheis/SwiftCLI", from: "6.0.0"),
+        .package(url: "https://github.com/rnine/SimplyCoreAudio.git", from: "4.1.1"),
+        .package(name: "LaunchAtLogin", url: "https://github.com/sindresorhus/LaunchAtLogin-Modern.git", from: "1.1.0")
     ],
     targets: [
         .executableTarget(
             name: "AudioInputLocker",
-            dependencies: ["SimplyCoreAudio", "SwiftCLI"]
+            dependencies: ["SimplyCoreAudio", "LaunchAtLogin"]
         ),
     ]
 )
