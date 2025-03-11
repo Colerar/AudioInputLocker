@@ -18,7 +18,7 @@ class AudioDeviceManager: ObservableObject {
             }
         }
     }
-    @Published var delay: Double = 0.3
+    @Published var delay: Double = 0.5
 
     init() {
         // Load persisted ID on initialization
@@ -36,14 +36,14 @@ class AudioDeviceManager: ObservableObject {
             name: .defaultInputDeviceChanged,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(deviceListChanged),
             name: .deviceListChanged,
             object: nil
         )
-        
+
         // Ensure persisted device is locked on relaunch
         if let lockedID = currentlyLockedDeviceID {
             ensureDeviceLocked(deviceID: lockedID)
@@ -52,7 +52,6 @@ class AudioDeviceManager: ObservableObject {
 
     }
 
-    
     @objc func updateDeviceList() {
         let devices = audio.allInputDevices
             .map { device in
@@ -95,11 +94,12 @@ class AudioDeviceManager: ObservableObject {
         guard let lockedID = currentlyLockedDeviceID else { return }
         
         // Add a small delay before restoring the locked device
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            self.ensureDeviceLocked(deviceID: lockedID)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.ensureDeviceLocked(deviceID: lockedID)
+            self?.updateDeviceList()
         }
     }
-    
+
     @objc func deviceListChanged() {
         updateDeviceList()
     }
