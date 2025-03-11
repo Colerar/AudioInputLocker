@@ -37,10 +37,19 @@ class AudioDeviceManager: ObservableObject {
             object: nil
         )
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(deviceListChanged),
+            name: .deviceListChanged,
+            object: nil
+        )
+        
         // Ensure persisted device is locked on relaunch
         if let lockedID = currentlyLockedDeviceID {
             ensureDeviceLocked(deviceID: lockedID)
         }
+        
+
     }
 
     
@@ -89,6 +98,10 @@ class AudioDeviceManager: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.ensureDeviceLocked(deviceID: lockedID)
         }
+    }
+    
+    @objc func deviceListChanged() {
+        updateDeviceList()
     }
 
     func ensureDeviceLocked(deviceID: Int) {
